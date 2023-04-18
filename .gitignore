@@ -1,0 +1,20 @@
+# IntelliJ project files
+.idea/
+*.iml
+
+# Compiled output
+out/
+target/
+
+# Dependencies
+lib/
+
+# Logs and databases
+log/
+*.log
+*.sqlite
+
+# Other
+*.class
+*.swp
+.DS_Store
