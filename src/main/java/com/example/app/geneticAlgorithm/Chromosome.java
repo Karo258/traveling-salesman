@@ -8,12 +8,18 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Chromosome {
+public class Chromosome implements Comparable<Chromosome> {
 
     private List<Point> pointList;
     private Double fitness;
+    private Double rank;
 
     public Chromosome(Integer size) {
         pointList = new ArrayList<>(size);
+    }
+
+    @Override
+    public int compareTo(Chromosome otherChromosome) {
+        return Double.compare(this.fitness, otherChromosome.fitness);
     }
 }

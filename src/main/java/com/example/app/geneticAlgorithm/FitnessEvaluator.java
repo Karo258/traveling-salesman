@@ -7,12 +7,12 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class FittnesEvaluator {
+public class FitnessEvaluator {
 
     private List<Chromosome> population;
 
     public void evaluate() {
-        for (Chromosome chromosome: population) {
+        for (Chromosome chromosome : population) {
             Double fitness = calculateFitness(chromosome);
             chromosome.setFitness(fitness);
         }
@@ -20,11 +20,11 @@ public class FittnesEvaluator {
 
     private Double calculateFitness(Chromosome chromosome) {
         List<Point> pointList = chromosome.getPointList();
-        Double totalDistance = 0.0;
+        double totalDistance = 0.0;
 
         for (int i = 0; i < pointList.size() - 1; i++) {
             Point current = pointList.get(i);
-            Point next = pointList.get(i+1);
+            Point next = pointList.get(i + 1);
             Double distance = calculateDistance(current, next);
             totalDistance += distance;
         }
@@ -38,8 +38,8 @@ public class FittnesEvaluator {
     }
 
     private Double calculateDistance(Point point1, Point point2) {
-        Double xDifference = point1.getX() - point2.getX();
-        Double yDifference = point1.getY() - point2.getY();
+        double xDifference = point1.getX() - point2.getX();
+        double yDifference = point1.getY() - point2.getY();
 
         return Math.sqrt(Math.pow(xDifference, 2) + Math.pow(yDifference, 2));
     }
