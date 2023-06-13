@@ -2,7 +2,8 @@ package com.example.app;
 
 import com.example.app.fileHandling.ReadFromFile;
 import com.example.app.geneticAlgorithm.Chromosome;
-import com.example.app.geneticAlgorithm.GeneticInitializer;
+import com.example.app.geneticAlgorithm.FittnesEvaluator;
+import com.example.app.geneticAlgorithm.Initializer;
 
 import java.util.List;
 import java.util.Scanner;
@@ -26,11 +27,14 @@ public class Main {
 
         scanner.close();
 
-        GeneticInitializer initializer = new GeneticInitializer(filename, 50);
+        Initializer initializer = new Initializer(filename, 50);
         List<Chromosome> population = initializer.initializePopulation();
 
-        for (Chromosome chromosome : population) {
-            System.out.println(chromosome.getPointList().get(0).getCityId());
+        FittnesEvaluator fittnesEvaluator = new FittnesEvaluator(population);
+        fittnesEvaluator.evaluate();
+
+        for (Chromosome chromosome: population) {
+            System.out.println(chromosome.getFitness());
         }
     }
 }

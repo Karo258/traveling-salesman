@@ -10,7 +10,7 @@ import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class GeneticInitializer {
+public class Initializer {
 
     private String filename;
     private Integer populationSize;

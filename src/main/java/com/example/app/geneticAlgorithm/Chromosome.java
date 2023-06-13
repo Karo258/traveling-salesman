@@ -11,6 +11,7 @@ import java.util.List;
 public class Chromosome {
 
     private List<Point> pointList;
+    private Double fitness;
 
     public Chromosome(Integer size) {
         pointList = new ArrayList<>(size);

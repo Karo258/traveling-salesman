@@ -42,6 +42,7 @@ public class ReadFromFile {
                             Double y = Double.parseDouble(parts[2]);
                             pointList.add(new Point(cityId, x, y));
                         } catch (NumberFormatException e) {
+//                            @TODO
                             System.out.println("NFE");
                         }
                     }
