@@ -53,9 +53,12 @@ public class Main {
             }
         }
 
+        Crossing crossing = new Crossing();
+        List<Chromosome> children = crossing.performCrossing(parents);
+
         scanner.close();
 
-        for (Chromosome chromosome : parents) {
+        for (Chromosome chromosome : children) {
             System.out.println(chromosome.getPointList());
         }
     }
