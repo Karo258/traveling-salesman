@@ -9,6 +9,9 @@ import java.util.Scanner;
 
 public class Main {
 
+    private static final Integer POPULATION_SIZE = 30;
+    private static final Integer NUM_PARENTS = 50;
+
     public static void main(String[] args) {
 
         String filename = "";
@@ -24,7 +27,7 @@ public class Main {
             }
         }
 
-        Initializer initializer = new Initializer(filename, 50);
+        Initializer initializer = new Initializer(filename, POPULATION_SIZE);
         List<Chromosome> population = initializer.initializePopulation();
 
         FitnessEvaluator fitnessEvaluator = new FitnessEvaluator(population);
@@ -38,15 +41,15 @@ public class Main {
             int selectionType = scanner.nextInt();
             if (selectionType == 1) {
                 RouletteSelection selection = new RouletteSelection(population);
-                parents = selection.selectParents(40);
+                parents = selection.selectParents(NUM_PARENTS);
                 selectionChosen = true;
             } else if (selectionType == 2) {
                 RankingSelection selection = new RankingSelection(population);
-                parents = selection.selectParents(40);
+                parents = selection.selectParents(NUM_PARENTS);
                 selectionChosen = true;
             } else if (selectionType == 3) {
                 TournamentSelection selection = new TournamentSelection(population);
-                parents = selection.selectParents(40);
+                parents = selection.selectParents(NUM_PARENTS);
                 selectionChosen = true;
             } else {
                 System.out.println("Please select one of the provided selection methods");
@@ -56,10 +59,16 @@ public class Main {
         Crossing crossing = new Crossing();
         List<Chromosome> children = crossing.performCrossing(parents);
 
+        Mutation mutation = new Mutation();
+        List<Chromosome> mutated = mutation.performMutation(children);
+
         scanner.close();
 
-        for (Chromosome chromosome : children) {
-            System.out.println(chromosome.getPointList());
+        for (int i = 0; i < children.size(); i++) {
+            System.out.println(children.get(i).getPointList());
+            System.out.println(mutated.get(i).getPointList());
+            System.out.println(
+                    "------------------------------------------------------------------------------------");
         }
     }
 }
