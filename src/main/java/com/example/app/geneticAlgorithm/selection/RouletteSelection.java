@@ -1,4 +1,6 @@
-package com.example.app.geneticAlgorithm;
+package com.example.app.geneticAlgorithm.selection;
+
+import com.example.app.geneticAlgorithm.Chromosome;
 
 import java.util.ArrayList;
 import java.util.List;

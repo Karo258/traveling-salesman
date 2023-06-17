@@ -2,6 +2,9 @@ package com.example.app;
 
 import com.example.app.fileHandling.ReadFromFile;
 import com.example.app.geneticAlgorithm.*;
+import com.example.app.geneticAlgorithm.selection.RankingSelection;
+import com.example.app.geneticAlgorithm.selection.RouletteSelection;
+import com.example.app.geneticAlgorithm.selection.TournamentSelection;
 
 import java.util.ArrayList;
 import java.util.List;
