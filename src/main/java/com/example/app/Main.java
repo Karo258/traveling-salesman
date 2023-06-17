@@ -6,7 +6,6 @@ import com.example.app.geneticAlgorithm.selection.RankingSelection;
 import com.example.app.geneticAlgorithm.selection.RouletteSelection;
 import com.example.app.geneticAlgorithm.selection.TournamentSelection;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -18,7 +17,7 @@ public class Main {
     public static void main(String[] args) {
 
         String filename = "";
-        System.out.println("Traveling Salesman v1");
+        System.out.println("Traveling Salesman");
         boolean wasRead = false;
         Scanner scanner = new Scanner(System.in);
 
@@ -37,41 +36,48 @@ public class Main {
         fitnessEvaluator.evaluate();
 
         boolean selectionChosen = false;
-        List<Chromosome> parents = new ArrayList<>();
+        int selectionType = 0;
         while (!selectionChosen) {
             System.out.println("Select selection option. Type 1 for roulette selection method, 2 for ranking " +
                     "selection method and 3 for tournament selection method.");
-            int selectionType = scanner.nextInt();
-            if (selectionType == 1) {
-                RouletteSelection selection = new RouletteSelection(population);
-                parents = selection.selectParents(NUM_PARENTS);
-                selectionChosen = true;
-            } else if (selectionType == 2) {
-                RankingSelection selection = new RankingSelection(population);
-                parents = selection.selectParents(NUM_PARENTS);
-                selectionChosen = true;
-            } else if (selectionType == 3) {
-                TournamentSelection selection = new TournamentSelection(population);
-                parents = selection.selectParents(NUM_PARENTS);
-                selectionChosen = true;
-            } else {
+            selectionType = scanner.nextInt();
+            if (selectionType != 1 && selectionType != 2 && selectionType != 3) {
                 System.out.println("Please select one of the provided selection methods");
+            } else {
+                selectionChosen = true;
             }
         }
 
-        Crossing crossing = new Crossing();
-        List<Chromosome> children = crossing.performCrossing(parents);
+        for (int i = 0; i < 200; i++) {
+            List<Chromosome> parents;
+            if (selectionType == 1) {
+                RouletteSelection selection = new RouletteSelection(population);
+                parents = selection.selectParents(NUM_PARENTS);
+            } else if (selectionType == 2) {
+                RankingSelection selection = new RankingSelection(population);
+                parents = selection.selectParents(NUM_PARENTS);
+            } else {
+                TournamentSelection selection = new TournamentSelection(population);
+                parents = selection.selectParents(NUM_PARENTS);
+            }
 
-        Mutation mutation = new Mutation();
-        List<Chromosome> mutated = mutation.performMutation(children);
+            Crossing crossing = new Crossing();
+            List<Chromosome> children = crossing.performCrossing(parents);
 
+            Mutation mutation = new Mutation();
+
+            population = mutation.performMutation(children);
+            fitnessEvaluator = new FitnessEvaluator(population);
+            fitnessEvaluator.evaluate();
+        }
         scanner.close();
 
-        for (int i = 0; i < children.size(); i++) {
-            System.out.println(children.get(i).getPointList());
-            System.out.println(mutated.get(i).getPointList());
-            System.out.println(
-                    "------------------------------------------------------------------------------------");
+        Double minimumPath = Double.MAX_VALUE;
+        for (Chromosome chromosome : population) {
+            if (chromosome.getFitness() < minimumPath) {
+                minimumPath = chromosome.getFitness();
+            }
         }
+        System.out.println(minimumPath);
     }
 }
