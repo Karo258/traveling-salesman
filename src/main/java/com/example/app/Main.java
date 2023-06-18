@@ -22,6 +22,8 @@ public class Main {
         boolean replacementChosen = false;
         int replacementType = 0;
         Double minimumPath = Double.MAX_VALUE;
+        Double previousMinimumPath;
+        boolean finished = false;
 
         Scanner scanner = new Scanner(System.in);
         while (!wasRead) {
@@ -60,7 +62,7 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < 10000; i++) {
+        while (!finished) {
             List<Chromosome> parents;
             if (selectionType == 1) {
                 RouletteSelection selection = new RouletteSelection(population);
@@ -91,14 +93,20 @@ public class Main {
             }
             fitnessEvaluator = new FitnessEvaluator(population);
             fitnessEvaluator.evaluate();
+
+            previousMinimumPath = minimumPath;
+            for (Chromosome chromosome : population) {
+                if (chromosome.getFitness() < minimumPath) {
+                    minimumPath = chromosome.getFitness();
+                }
+            }
+
+            if (Math.abs(previousMinimumPath - minimumPath) < 0.1) {
+                finished = true;
+            }
         }
         scanner.close();
 
-        for (Chromosome chromosome : population) {
-            if (chromosome.getFitness() < minimumPath) {
-                minimumPath = chromosome.getFitness();
-            }
-        }
         System.out.println(minimumPath);
     }
 }
