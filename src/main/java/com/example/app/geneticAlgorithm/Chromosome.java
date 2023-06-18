@@ -30,5 +30,4 @@ public class Chromosome implements Comparable<Chromosome> {
     public Point getPoint(int index) {
         return pointList.get(index);
     }
-
 }

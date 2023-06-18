@@ -48,7 +48,20 @@ public class Main {
             }
         }
 
-        for (int i = 0; i < 200; i++) {
+        boolean replacementChosen = false;
+        int replacementType = 0;
+        while (!replacementChosen) {
+            System.out.println("Select replacement option. Type 1 for replacing the whole population and 2 for " +
+                    "replacing only the worst elements of the old population.");
+            replacementType = scanner.nextInt();
+            if (replacementType != 1 && replacementType != 2) {
+                System.out.println("Please select one of the provided replacement options.");
+            } else {
+                replacementChosen = true;
+            }
+        }
+
+        for (int i = 0; i < 10000; i++) {
             List<Chromosome> parents;
             if (selectionType == 1) {
                 RouletteSelection selection = new RouletteSelection(population);
@@ -65,8 +78,18 @@ public class Main {
             List<Chromosome> children = crossing.performCrossing(parents);
 
             Mutation mutation = new Mutation();
+            List<Chromosome> mutated = mutation.performMutation(children);
 
-            population = mutation.performMutation(children);
+            fitnessEvaluator = new FitnessEvaluator(mutated);
+            fitnessEvaluator.evaluate();
+
+            if (replacementType == 1) {
+                Replacement replacement = new Replacement();
+                population = replacement.replace(mutated);
+            } else {
+                Replacement replacement = new Replacement(10);
+                population = replacement.replaceWorst(population, mutated);
+            }
             fitnessEvaluator = new FitnessEvaluator(population);
             fitnessEvaluator.evaluate();
         }
