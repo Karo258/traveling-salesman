@@ -12,15 +12,18 @@ import java.util.Scanner;
 public class Main {
 
     private static final Integer POPULATION_SIZE = 30;
-    private static final Integer NUM_PARENTS = 50;
+    private static final Integer NUM_REPLACEMENTS = POPULATION_SIZE / 2;
 
     public static void main(String[] args) {
-
         String filename = "";
-        System.out.println("Traveling Salesman");
         boolean wasRead = false;
-        Scanner scanner = new Scanner(System.in);
+        boolean selectionChosen = false;
+        int selectionType = 0;
+        boolean replacementChosen = false;
+        int replacementType = 0;
+        Double minimumPath = Double.MAX_VALUE;
 
+        Scanner scanner = new Scanner(System.in);
         while (!wasRead) {
             System.out.print("Type in the filename: ");
             filename = scanner.nextLine();
@@ -35,8 +38,6 @@ public class Main {
         FitnessEvaluator fitnessEvaluator = new FitnessEvaluator(population);
         fitnessEvaluator.evaluate();
 
-        boolean selectionChosen = false;
-        int selectionType = 0;
         while (!selectionChosen) {
             System.out.println("Select selection option. Type 1 for roulette selection method, 2 for ranking " +
                     "selection method and 3 for tournament selection method.");
@@ -48,8 +49,6 @@ public class Main {
             }
         }
 
-        boolean replacementChosen = false;
-        int replacementType = 0;
         while (!replacementChosen) {
             System.out.println("Select replacement option. Type 1 for replacing the whole population and 2 for " +
                     "replacing only the worst elements of the old population.");
@@ -65,13 +64,13 @@ public class Main {
             List<Chromosome> parents;
             if (selectionType == 1) {
                 RouletteSelection selection = new RouletteSelection(population);
-                parents = selection.selectParents(NUM_PARENTS);
+                parents = selection.selectParents(POPULATION_SIZE);
             } else if (selectionType == 2) {
                 RankingSelection selection = new RankingSelection(population);
-                parents = selection.selectParents(NUM_PARENTS);
+                parents = selection.selectParents(POPULATION_SIZE);
             } else {
                 TournamentSelection selection = new TournamentSelection(population);
-                parents = selection.selectParents(NUM_PARENTS);
+                parents = selection.selectParents(POPULATION_SIZE);
             }
 
             Crossing crossing = new Crossing();
@@ -87,7 +86,7 @@ public class Main {
                 Replacement replacement = new Replacement();
                 population = replacement.replace(mutated);
             } else {
-                Replacement replacement = new Replacement(10);
+                Replacement replacement = new Replacement(NUM_REPLACEMENTS);
                 population = replacement.replaceWorst(population, mutated);
             }
             fitnessEvaluator = new FitnessEvaluator(population);
@@ -95,7 +94,6 @@ public class Main {
         }
         scanner.close();
 
-        Double minimumPath = Double.MAX_VALUE;
         for (Chromosome chromosome : population) {
             if (chromosome.getFitness() < minimumPath) {
                 minimumPath = chromosome.getFitness();
