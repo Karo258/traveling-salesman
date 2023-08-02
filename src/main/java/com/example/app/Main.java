@@ -2,10 +2,12 @@ package com.example.app;
 
 import com.example.app.fileHandling.ReadFromFile;
 import com.example.app.geneticAlgorithm.*;
+import com.example.app.geneticAlgorithm.optimzation.TwoOptimal;
 import com.example.app.geneticAlgorithm.selection.RankingSelection;
 import com.example.app.geneticAlgorithm.selection.RouletteSelection;
 import com.example.app.geneticAlgorithm.selection.TournamentSelection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
@@ -84,13 +86,23 @@ public class Main {
             fitnessEvaluator = new FitnessEvaluator(mutated);
             fitnessEvaluator.evaluate();
 
+            List<Chromosome> optimized = new ArrayList<>();
+            for (Chromosome value : mutated) {
+                Chromosome optimalChromosome = TwoOptimal.performTwoOptimal(value);
+                optimized.add(optimalChromosome);
+            }
+
+            fitnessEvaluator = new FitnessEvaluator(optimized);
+            fitnessEvaluator.evaluate();
+
             if (replacementType == 1) {
                 Replacement replacement = new Replacement();
-                population = replacement.replace(mutated);
+                population = replacement.replace(optimized);
             } else {
                 Replacement replacement = new Replacement(NUM_REPLACEMENTS);
-                population = replacement.replaceWorst(population, mutated);
+                population = replacement.replaceWorst(population, optimized);
             }
+
             fitnessEvaluator = new FitnessEvaluator(population);
             fitnessEvaluator.evaluate();
 
