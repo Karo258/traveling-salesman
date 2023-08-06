@@ -1,11 +1,14 @@
-package com.example.app.geneticAlgorithm;
+package com.example.app.geneticAlgorithm.mutation;
+
+import com.example.app.geneticAlgorithm.Chromosome;
+import com.example.app.geneticAlgorithm.Point;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-public class Mutation {
+public class PositionChangeMutation {
 
     private static final Double MUTATION_RATE = 0.1;
 

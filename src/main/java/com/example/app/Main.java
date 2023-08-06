@@ -2,6 +2,8 @@ package com.example.app;
 
 import com.example.app.fileHandling.ReadFromFile;
 import com.example.app.geneticAlgorithm.*;
+import com.example.app.geneticAlgorithm.mutation.DijkstraAlgorithmMutation;
+import com.example.app.geneticAlgorithm.mutation.PositionChangeMutation;
 import com.example.app.geneticAlgorithm.optimzation.TwoOptimal;
 import com.example.app.geneticAlgorithm.selection.RankingSelection;
 import com.example.app.geneticAlgorithm.selection.RouletteSelection;
@@ -26,6 +28,10 @@ public class Main {
         Double minimumPath = Double.MAX_VALUE;
         Double previousMinimumPath;
         boolean finished = false;
+        boolean mutationChosen = false;
+        int mutationType = 0;
+        Chromosome finalChromosome = null;
+        Chromosome previousFinalChromosome;
 
         Scanner scanner = new Scanner(System.in);
         while (!wasRead) {
@@ -64,6 +70,17 @@ public class Main {
             }
         }
 
+        while (!mutationChosen) {
+            System.out.println("Select mutation option. Type 1 for changing a position of points in the chromosome " +
+                    "and 2 for using the Dijkstra algorithm.");
+            mutationType = scanner.nextInt();
+            if (mutationType != 1 && mutationType != 2) {
+                System.out.println("Please select one of the provided mutation options.");
+            } else {
+                mutationChosen = true;
+            }
+        }
+
         while (!finished) {
             List<Chromosome> parents;
             if (selectionType == 1) {
@@ -80,8 +97,21 @@ public class Main {
             Crossing crossing = new Crossing();
             List<Chromosome> children = crossing.performCrossing(parents);
 
-            Mutation mutation = new Mutation();
-            List<Chromosome> mutated = mutation.performMutation(children);
+            for (Chromosome chromosome: children) {
+                for (Point p: chromosome.getPointList()) {
+                    System.out.print(p.getCityId() + ", ");
+                }
+                System.out.println("-------------------");
+            }
+
+            List<Chromosome> mutated;
+            if (mutationType == 1) {
+                PositionChangeMutation positionChangeMutation = new PositionChangeMutation();
+                mutated = positionChangeMutation.performMutation(children);
+            } else {
+                DijkstraAlgorithmMutation dijkstraAlgorithmMutation = new DijkstraAlgorithmMutation();
+                mutated = dijkstraAlgorithmMutation.performMutation(children);
+            }
 
             fitnessEvaluator = new FitnessEvaluator(mutated);
             fitnessEvaluator.evaluate();
@@ -107,9 +137,11 @@ public class Main {
             fitnessEvaluator.evaluate();
 
             previousMinimumPath = minimumPath;
+            previousFinalChromosome = finalChromosome;
             for (Chromosome chromosome : population) {
                 if (chromosome.getFitness() < minimumPath) {
                     minimumPath = chromosome.getFitness();
+                    finalChromosome = chromosome;
                 }
             }
 
@@ -120,5 +152,8 @@ public class Main {
         scanner.close();
 
         System.out.println(minimumPath);
+        for (Point point: finalChromosome.getPointList()) {
+            System.out.print(point.getCityId() + ", ");
+        }
     }
 }
