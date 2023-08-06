@@ -31,7 +31,6 @@ public class Main {
         boolean mutationChosen = false;
         int mutationType = 0;
         Chromosome finalChromosome = null;
-        Chromosome previousFinalChromosome;
 
         Scanner scanner = new Scanner(System.in);
         while (!wasRead) {
@@ -97,13 +96,6 @@ public class Main {
             Crossing crossing = new Crossing();
             List<Chromosome> children = crossing.performCrossing(parents);
 
-            for (Chromosome chromosome: children) {
-                for (Point p: chromosome.getPointList()) {
-                    System.out.print(p.getCityId() + ", ");
-                }
-                System.out.println("-------------------");
-            }
-
             List<Chromosome> mutated;
             if (mutationType == 1) {
                 PositionChangeMutation positionChangeMutation = new PositionChangeMutation();
@@ -137,7 +129,6 @@ public class Main {
             fitnessEvaluator.evaluate();
 
             previousMinimumPath = minimumPath;
-            previousFinalChromosome = finalChromosome;
             for (Chromosome chromosome : population) {
                 if (chromosome.getFitness() < minimumPath) {
                     minimumPath = chromosome.getFitness();
@@ -152,7 +143,7 @@ public class Main {
         scanner.close();
 
         System.out.println(minimumPath);
-        for (Point point: finalChromosome.getPointList()) {
+        for (Point point : finalChromosome.getPointList()) {
             System.out.print(point.getCityId() + ", ");
         }
     }

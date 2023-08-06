@@ -1,7 +1,9 @@
 package com.example.app.geneticAlgorithm;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Crossing {
 
@@ -22,17 +24,29 @@ public class Crossing {
 
     private Chromosome createChild(Chromosome p1, Chromosome p2) {
         int size = p1.getPointList().size();
-        int halfSize = size / 2;
 
         List<Point> childPointList = new ArrayList<>();
+        Set<Integer> addedCityIds = new HashSet<>();
 
-        for (int i = 0; i < halfSize; i++) {
-            childPointList.add(p1.getPoint(i));
-        }
-        for (int i = halfSize; i < size; i++) {
-            childPointList.add(p2.getPoint(i));
+        for (int i = 0; i < size; i++) {
+            Point point = p1.getPoint(i);
+            if (addedCityIds.add(point.getCityId())) {
+                childPointList.add(point);
+            } else {
+                Point replacementPoint = findReplacement(p2, point);
+                childPointList.add(replacementPoint);
+            }
         }
 
         return new Chromosome(childPointList);
+    }
+
+    private Point findReplacement(Chromosome parent, Point duplicatePoint) {
+        for (Point point : parent.getPointList()) {
+            if (!duplicatePoint.equals(point)) {
+                return point;
+            }
+        }
+        throw new IllegalArgumentException("Could not find a replacement point.");
     }
 }
