@@ -19,8 +19,8 @@ public class Replacement {
     public List<Chromosome> replaceWorst(List<Chromosome> oldPopulation, List<Chromosome> newPopulation) {
         Collections.sort(oldPopulation);
         newPopulation.sort(Collections.reverseOrder());
-
         int index = oldPopulation.size() - numReplacements;
+
         for (int i = 0; i < numReplacements; i++) {
             oldPopulation.set(index + i, newPopulation.get(i));
         }

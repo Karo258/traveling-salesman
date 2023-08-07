@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReadFromFile {
+public abstract class ReadFromFile {
 
     private String filename;
 
@@ -41,7 +41,7 @@ public class ReadFromFile {
                             Double x = Double.parseDouble(parts[1]);
                             Double y = Double.parseDouble(parts[2]);
                             boolean alreadyInPointList = false;
-                            for (Point point: pointList) {
+                            for (Point point : pointList) {
                                 if (point.getX().equals(x) && point.getY().equals(y)) {
                                     alreadyInPointList = true;
                                     break;
@@ -51,8 +51,7 @@ public class ReadFromFile {
                                 pointList.add(new Point(cityId, x, y));
                             }
                         } catch (NumberFormatException e) {
-//                            @TODO
-                            System.out.println("NFE");
+                            System.out.println("File format exception.");
                         }
                     }
                 }
@@ -62,5 +61,4 @@ public class ReadFromFile {
         }
         return pointList;
     }
-
 }

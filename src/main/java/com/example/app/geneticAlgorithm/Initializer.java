@@ -16,10 +16,9 @@ public class Initializer {
     private Integer populationSize;
 
     public List<Chromosome> initializePopulation() {
-
         List<Chromosome> population = new ArrayList<>();
         List<Point> pointList = ReadFromFile.read(filename);
-        Integer pointListSize = pointList.size();
+        int pointListSize = pointList.size();
 
         for (int i = 0; i < populationSize; i++) {
             Chromosome chromosome = new Chromosome(pointListSize);

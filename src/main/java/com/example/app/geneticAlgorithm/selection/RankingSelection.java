@@ -19,10 +19,8 @@ public class RankingSelection {
 
     public List<Chromosome> selectParents(int numParents) {
         List<Chromosome> parents = new ArrayList<>();
-
         population.sort(Collections.reverseOrder());
         calculateRanks();
-
         Double totalRankSum = calculateTotalRankSum();
         int populationSize = population.size();
 
@@ -37,13 +35,16 @@ public class RankingSelection {
                 if (current >= randomValue) {
                     parents.add(chromosome);
                     parentSelected = true;
+
                     break;
                 }
             }
+
             if (!parentSelected) {
                 parents.add(population.get(populationSize - 1));
             }
         }
+
         return parents;
     }
 

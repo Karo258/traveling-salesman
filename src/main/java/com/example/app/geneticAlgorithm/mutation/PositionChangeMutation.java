@@ -25,6 +25,7 @@ public class PositionChangeMutation {
                 mutatedPopulation.add(chromosome);
             }
         }
+
         return mutatedPopulation;
     }
 
@@ -32,7 +33,6 @@ public class PositionChangeMutation {
         List<Point> pointList = new ArrayList<>(chromosome.getPointList());
         int size = chromosome.getPointList().size();
         Random random = new Random();
-
         int index1 = random.nextInt(size);
         int index2 = random.nextInt(size);
 

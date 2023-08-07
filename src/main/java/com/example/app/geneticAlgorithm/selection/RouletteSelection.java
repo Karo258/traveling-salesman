@@ -29,6 +29,7 @@ public class RouletteSelection {
 
                 if (current >= randomValue) {
                     parents.add(chromosome);
+
                     break;
                 }
             }
@@ -39,9 +40,11 @@ public class RouletteSelection {
 
     private Double calculateTotalFitness() {
         Double fitness = 0.0;
+
         for (Chromosome chromosome : population) {
             fitness += chromosome.getFitness();
         }
+
         return fitness;
     }
 }

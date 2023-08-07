@@ -19,7 +19,6 @@ public class TwoOptimal {
             for (int i = 0; i < size - 1; i++) {
                 for (int j = i + 1; j < size; j++) {
                     List<Point> tmp = twoOptimalSwap(current, i, j);
-
                     Double currentFitness = calculateFitness(current);
                     Double tmpFitness = calculateFitness(tmp);
 
@@ -43,6 +42,7 @@ public class TwoOptimal {
 
     private static Double calculateFitness(List<Point> pointList) {
         double totalDistance = 0.0;
+
         for (int i = 0; i < pointList.size() - 1; i++) {
             Point current = pointList.get(i);
             Point next = pointList.get(i + 1);

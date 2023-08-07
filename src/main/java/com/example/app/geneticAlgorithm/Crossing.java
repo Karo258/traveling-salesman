@@ -15,21 +15,21 @@ public class Crossing {
             Chromosome p2 = parents.get(i + 1);
             Chromosome c1 = createChild(p1, p2);
             Chromosome c2 = createChild(p2, p1);
-
             offspring.add(c1);
             offspring.add(c2);
         }
+
         return offspring;
     }
 
     private Chromosome createChild(Chromosome p1, Chromosome p2) {
         int size = p1.getPointList().size();
-
         List<Point> childPointList = new ArrayList<>();
         Set<Integer> addedCityIds = new HashSet<>();
 
         for (int i = 0; i < size; i++) {
             Point point = p1.getPoint(i);
+
             if (addedCityIds.add(point.getCityId())) {
                 childPointList.add(point);
             } else {
@@ -42,11 +42,13 @@ public class Crossing {
     }
 
     private Point findReplacement(Chromosome parent, Point duplicatePoint) {
+
         for (Point point : parent.getPointList()) {
             if (!duplicatePoint.equals(point)) {
                 return point;
             }
         }
+
         throw new IllegalArgumentException("Could not find a replacement point.");
     }
 }

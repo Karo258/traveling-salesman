@@ -14,7 +14,7 @@ public class DijkstraAlgorithmMutation {
     public List<Chromosome> performMutation(List<Chromosome> population) {
         List<Chromosome> mutatedPopulation = new ArrayList<>();
 
-        for (Chromosome chromosome: population) {
+        for (Chromosome chromosome : population) {
             Chromosome mutatedChromosome = mutate(chromosome);
             mutatedPopulation.add(mutatedChromosome);
         }
@@ -23,6 +23,7 @@ public class DijkstraAlgorithmMutation {
     }
 
     private Chromosome mutate(Chromosome chromosome) {
+
         if (Math.random() < MUTATION_RATE) {
             List<Point> currentPoints = chromosome.getPointList();
             List<Point> mutatedPoints = performDijkstra(currentPoints);
@@ -35,17 +36,19 @@ public class DijkstraAlgorithmMutation {
 
             return new Chromosome(combinedPointLists);
         } else {
+
             return chromosome;
         }
     }
 
     private List<Point> performDijkstra(List<Point> pointList) {
         int numberOfPoints = pointList.size();
-
         double[][] graph = new double[numberOfPoints][numberOfPoints];
+
         for (int i = 0; i < numberOfPoints; i++) {
             Point source = pointList.get(i);
-            for (int j = 0; j< numberOfPoints; j++) {
+
+            for (int j = 0; j < numberOfPoints; j++) {
                 Point target = pointList.get(j);
                 graph[i][j] = calculateDistance(source, target);
             }
@@ -54,20 +57,20 @@ public class DijkstraAlgorithmMutation {
         Random random = new Random();
         int index1 = random.nextInt(numberOfPoints);
         int index2;
+
         do {
             index2 = random.nextInt(numberOfPoints);
         } while (index1 == index2);
 
         List<Integer> shortestPath = dijkstra(graph, index1, index2);
-
         List<Point> mutatedPointList = new ArrayList<>(numberOfPoints);
-        for (int index: shortestPath) {
+
+        for (int index : shortestPath) {
             mutatedPointList.add(pointList.get(index));
         }
 
         return mutatedPointList;
     }
-
 
     private Double calculateDistance(Point point1, Point point2) {
         double xDistance = point1.getX() - point2.getX();
@@ -98,9 +101,10 @@ public class DijkstraAlgorithmMutation {
             }
             visited[current] = true;
 
-            for (int neighbor = 0; neighbor < numberOfVertices; neighbor++){
+            for (int neighbor = 0; neighbor < numberOfVertices; neighbor++) {
                 if (!visited[neighbor] && graph[current][neighbor] > 0) {
                     double newDistance = distances[current] + graph[current][neighbor];
+
                     if (newDistance < distances[neighbor]) {
                         distances[neighbor] = newDistance;
                         previous[neighbor] = current;
@@ -112,10 +116,12 @@ public class DijkstraAlgorithmMutation {
 
         List<Integer> shortestPath = new ArrayList<>();
         int current = end;
+
         while (current != start) {
             shortestPath.add(current);
             current = previous[current];
         }
+
         shortestPath.add(start);
         Collections.reverse(shortestPath);
 

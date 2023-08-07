@@ -36,18 +36,18 @@ public class Main {
         Long startTime = System.nanoTime();
 
         Scanner scanner = new Scanner(System.in);
+
         while (!wasRead) {
             System.out.print("Type in the filename: ");
             filename = scanner.nextLine();
+
             if (!ReadFromFile.read(filename).isEmpty()) {
                 wasRead = true;
             }
         }
 
-        System.out.println("Initialization");
         Initializer initializer = new Initializer(filename, POPULATION_SIZE);
         List<Chromosome> population = initializer.initializePopulation();
-
         FitnessEvaluator fitnessEvaluator = new FitnessEvaluator(population);
         fitnessEvaluator.evaluate();
 
@@ -55,6 +55,7 @@ public class Main {
             System.out.println("Select selection option. Type 1 for roulette selection method, 2 for ranking " +
                     "selection method and 3 for tournament selection method.");
             selectionType = scanner.nextInt();
+
             if (selectionType != 1 && selectionType != 2 && selectionType != 3) {
                 System.out.println("Please select one of the provided selection methods");
             } else {
@@ -66,6 +67,7 @@ public class Main {
             System.out.println("Select replacement option. Type 1 for replacing the whole population and 2 for " +
                     "replacing only the worst elements of the old population.");
             replacementType = scanner.nextInt();
+
             if (replacementType != 1 && replacementType != 2) {
                 System.out.println("Please select one of the provided replacement options.");
             } else {
@@ -77,6 +79,7 @@ public class Main {
             System.out.println("Select mutation option. Type 1 for changing a position of points in the chromosome " +
                     "and 2 for using the Dijkstra algorithm.");
             mutationType = scanner.nextInt();
+
             if (mutationType != 1 && mutationType != 2) {
                 System.out.println("Please select one of the provided mutation options.");
             } else {
@@ -87,6 +90,7 @@ public class Main {
         while (!optimizationChosen) {
             System.out.println("Select if you want optimization. Type 1 for optimization and 2 for no optimization.");
             optimizationType = scanner.nextInt();
+
             if (optimizationType != 1 && optimizationType != 2) {
                 System.out.println("Please select one of the provided optimization options.");
             } else {
@@ -95,8 +99,8 @@ public class Main {
         }
 
         while (!finished) {
-            System.out.println("Selection");
             List<Chromosome> parents;
+
             if (selectionType == 1) {
                 RouletteSelection selection = new RouletteSelection(population);
                 parents = selection.selectParents(POPULATION_SIZE);
@@ -108,12 +112,10 @@ public class Main {
                 parents = selection.selectParents(POPULATION_SIZE);
             }
 
-            System.out.println("Crossing");
             Crossing crossing = new Crossing();
             List<Chromosome> children = crossing.performCrossing(parents);
-
-            System.out.println("Mutation");
             List<Chromosome> mutated;
+
             if (mutationType == 1) {
                 PositionChangeMutation positionChangeMutation = new PositionChangeMutation();
                 mutated = positionChangeMutation.performMutation(children);
@@ -124,10 +126,10 @@ public class Main {
 
             fitnessEvaluator = new FitnessEvaluator(mutated);
             fitnessEvaluator.evaluate();
-
-            System.out.println("Optimization");
             List<Chromosome> optimized = new ArrayList<>();
+
             if (optimizationType == 1) {
+
                 for (Chromosome value : mutated) {
                     Chromosome optimalChromosome = TwoOptimal.performTwoOptimal(value);
                     optimized.add(optimalChromosome);
@@ -139,7 +141,6 @@ public class Main {
             fitnessEvaluator = new FitnessEvaluator(optimized);
             fitnessEvaluator.evaluate();
 
-            System.out.println("Replacement");
             if (replacementType == 1) {
                 Replacement replacement = new Replacement();
                 population = replacement.replace(optimized);
@@ -150,9 +151,10 @@ public class Main {
 
             fitnessEvaluator = new FitnessEvaluator(population);
             fitnessEvaluator.evaluate();
-
             previousMinimumPath = minimumPath;
+
             for (Chromosome chromosome : population) {
+
                 if (chromosome.getFitness() < minimumPath) {
                     minimumPath = chromosome.getFitness();
                     finalChromosome = chromosome;
@@ -163,15 +165,18 @@ public class Main {
                 finished = true;
             }
         }
-        scanner.close();
 
+        scanner.close();
         Long endTime = System.nanoTime();
-        Long time = endTime - startTime;
-        System.out.println(minimumPath);
+        long time = endTime - startTime;
+        System.out.println("Minimal path length is: " + minimumPath);
+        System.out.print("The route: ");
+
         for (Point point : finalChromosome.getPointList()) {
             System.out.print(point.getCityId() + ", ");
         }
+
         System.out.println();
-        System.out.println(time * Math.pow(10, -9)+ "s");
+        System.out.println("Calculation time: " + time * Math.pow(10, -9) + "s");
     }
 }

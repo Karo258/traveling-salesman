@@ -12,6 +12,7 @@ public class FitnessEvaluator {
     private List<Chromosome> population;
 
     public void evaluate() {
+
         for (Chromosome chromosome : population) {
             Double fitness = calculateFitness(chromosome);
             chromosome.setFitness(fitness);
