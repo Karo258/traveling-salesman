@@ -19,12 +19,13 @@ public class Initializer {
 
         List<Chromosome> population = new ArrayList<>();
         List<Point> pointList = ReadFromFile.read(filename);
+        Integer pointListSize = pointList.size();
 
         for (int i = 0; i < populationSize; i++) {
-            Chromosome chromosome = new Chromosome(populationSize);
+            Chromosome chromosome = new Chromosome(pointListSize);
             List<Point> shuffledPointList = new ArrayList<>(pointList);
             Collections.shuffle(shuffledPointList);
-            chromosome.setPointList(shuffledPointList.subList(0, populationSize));
+            chromosome.setPointList(shuffledPointList.subList(0, pointListSize));
             population.add(chromosome);
         }
 
