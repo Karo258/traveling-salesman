@@ -24,8 +24,16 @@ public class DijkstraAlgorithmMutation {
 
     private Chromosome mutate(Chromosome chromosome) {
         if (Math.random() < MUTATION_RATE) {
-            List<Point> mutatedPoints = performDijkstra(chromosome.getPointList());
-            return new Chromosome(mutatedPoints);
+            List<Point> currentPoints = chromosome.getPointList();
+            List<Point> mutatedPoints = performDijkstra(currentPoints);
+
+            List<Point> remainingPoints = new ArrayList<>(currentPoints);
+            remainingPoints.removeAll(mutatedPoints);
+
+            List<Point> combinedPointLists = new ArrayList<>(remainingPoints);
+            combinedPointLists.addAll(mutatedPoints);
+
+            return new Chromosome(combinedPointLists);
         } else {
             return chromosome;
         }
