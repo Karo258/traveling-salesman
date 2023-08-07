@@ -33,6 +33,7 @@ public class Main {
         Chromosome finalChromosome = null;
         boolean optimizationChosen = false;
         int optimizationType = 0;
+        Long startTime = System.nanoTime();
 
         Scanner scanner = new Scanner(System.in);
         while (!wasRead) {
@@ -164,9 +165,13 @@ public class Main {
         }
         scanner.close();
 
+        Long endTime = System.nanoTime();
+        Long time = endTime - startTime;
         System.out.println(minimumPath);
         for (Point point : finalChromosome.getPointList()) {
             System.out.print(point.getCityId() + ", ");
         }
+        System.out.println();
+        System.out.println(time * Math.pow(10, -9)+ "s");
     }
 }
