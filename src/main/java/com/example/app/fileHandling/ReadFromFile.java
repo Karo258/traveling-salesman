@@ -40,7 +40,16 @@ public class ReadFromFile {
                             int cityId = Integer.parseInt(parts[0]);
                             Double x = Double.parseDouble(parts[1]);
                             Double y = Double.parseDouble(parts[2]);
-                            pointList.add(new Point(cityId, x, y));
+                            boolean alreadyInPointList = false;
+                            for (Point point: pointList) {
+                                if (point.getX().equals(x) && point.getY().equals(y)) {
+                                    alreadyInPointList = true;
+                                    break;
+                                }
+                            }
+                            if (!alreadyInPointList) {
+                                pointList.add(new Point(cityId, x, y));
+                            }
                         } catch (NumberFormatException e) {
 //                            @TODO
                             System.out.println("NFE");

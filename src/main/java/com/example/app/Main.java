@@ -31,6 +31,8 @@ public class Main {
         boolean mutationChosen = false;
         int mutationType = 0;
         Chromosome finalChromosome = null;
+        boolean optimizationChosen = false;
+        int optimizationType = 0;
 
         Scanner scanner = new Scanner(System.in);
         while (!wasRead) {
@@ -41,6 +43,7 @@ public class Main {
             }
         }
 
+        System.out.println("Initialization");
         Initializer initializer = new Initializer(filename, POPULATION_SIZE);
         List<Chromosome> population = initializer.initializePopulation();
 
@@ -80,7 +83,18 @@ public class Main {
             }
         }
 
+        while (!optimizationChosen) {
+            System.out.println("Select if you want optimization. Type 1 for optimization and 2 for no optimization.");
+            optimizationType = scanner.nextInt();
+            if (optimizationType != 1 && optimizationType != 2) {
+                System.out.println("Please select one of the provided optimization options.");
+            } else {
+                optimizationChosen = true;
+            }
+        }
+
         while (!finished) {
+            System.out.println("Selection");
             List<Chromosome> parents;
             if (selectionType == 1) {
                 RouletteSelection selection = new RouletteSelection(population);
@@ -93,9 +107,11 @@ public class Main {
                 parents = selection.selectParents(POPULATION_SIZE);
             }
 
+            System.out.println("Crossing");
             Crossing crossing = new Crossing();
             List<Chromosome> children = crossing.performCrossing(parents);
 
+            System.out.println("Mutation");
             List<Chromosome> mutated;
             if (mutationType == 1) {
                 PositionChangeMutation positionChangeMutation = new PositionChangeMutation();
@@ -108,15 +124,21 @@ public class Main {
             fitnessEvaluator = new FitnessEvaluator(mutated);
             fitnessEvaluator.evaluate();
 
+            System.out.println("Optimization");
             List<Chromosome> optimized = new ArrayList<>();
-            for (Chromosome value : mutated) {
-                Chromosome optimalChromosome = TwoOptimal.performTwoOptimal(value);
-                optimized.add(optimalChromosome);
+            if (optimizationType == 1) {
+                for (Chromosome value : mutated) {
+                    Chromosome optimalChromosome = TwoOptimal.performTwoOptimal(value);
+                    optimized.add(optimalChromosome);
+                }
+            } else {
+                optimized = mutated;
             }
 
             fitnessEvaluator = new FitnessEvaluator(optimized);
             fitnessEvaluator.evaluate();
 
+            System.out.println("Replacement");
             if (replacementType == 1) {
                 Replacement replacement = new Replacement();
                 population = replacement.replace(optimized);
